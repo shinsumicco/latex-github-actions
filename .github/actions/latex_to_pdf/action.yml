@@ -1,0 +1,13 @@
+name: "Typeset LaTeX to PDF"
+description: "Typeset a latex source code to a PDF file"
+
+inputs:
+  name:
+    description: "filename of a latex source code"
+    required: true
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  env:
+    LATEX_FILENAME: ${{ inputs.name }}

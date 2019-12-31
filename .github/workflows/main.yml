@@ -1,0 +1,39 @@
+name: LaTeX to PDF
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    name: Typeset LaTeX to PDF
+    steps:
+      - name: Setup Git repository
+        uses: actions/checkout@master
+      - name: Typeset
+        uses: ./.github/actions/latex_to_pdf
+        with:
+          name: main.tex
+      - name: Store artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: manuscript
+          path: main.pdf
+  deploy:
+    runs-on: ubuntu-18.04
+    needs: [build]
+    name: Release PDF to GitHub
+    steps:
+      - name: Setup Git repository
+        uses: actions/checkout@master
+      - name: Load artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: manuscript
+      - name: Update release
+        uses: ./.github/actions/update_release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: ./manuscript/main.pdf

@@ -1,0 +1,17 @@
+name: "Update release"
+description: "Upload a release file and remove old ones"
+
+inputs:
+  token:
+    description: "GitHub token"
+    required: true
+  path:
+    description: "filepath of a PDF file to upload"
+    required: true
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  env:
+    GITHUB_TOKEN: ${{ inputs.token }}
+    PDF_FILEPATH: ${{ inputs.path }}
